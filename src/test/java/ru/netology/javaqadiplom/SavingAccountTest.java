@@ -182,4 +182,19 @@ public class SavingAccountTest {
             account.getBalance();
         });
     }
+
+    @Test
+    public void shouldTrowWhenMaxBalanceNegative() {
+        // проверка создания аккаунта, где минимальный баланс отрицательный
+        SavingAccount account = new SavingAccount(
+                3_000,
+                -10_000,
+                1_000,
+                1
+        );
+
+        Assertions.assertThrows(IllegalArgumentException.class,() ->{
+            account.getMinBalance();
+        });
+    }
 }
