@@ -12,6 +12,14 @@ public class CreditAccountTest {
             account.getBalance();
         });
     }
+    @Test
+    public void sholdThrowExceptionRate() {
+        //Проверка выброса исключений для отрицательной ставки
+        CreditAccount account = new CreditAccount(10_000, 10_000, -10);
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            account.getRate();
+        });
+    }
 
     @Test
     public void sholdThrowExceptionCreditLimit() {
