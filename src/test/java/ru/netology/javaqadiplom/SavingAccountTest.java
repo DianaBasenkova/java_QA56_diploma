@@ -184,7 +184,7 @@ public class SavingAccountTest {
     }
 
     @Test
-    public void shouldTrowWhenMaxBalanceNegative() {
+    public void shouldTrowWhenMinBalanceNegative() {
         // проверка создания аккаунта, где минимальный баланс отрицательный
         SavingAccount account = new SavingAccount(
                 3_000,
