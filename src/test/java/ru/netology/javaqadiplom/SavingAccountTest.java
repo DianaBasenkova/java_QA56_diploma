@@ -77,7 +77,7 @@ public class SavingAccountTest {
 
         account.add(8_000);
 
-        Assertions.assertEquals(10_000, account.getBalance());
+        Assertions.assertEquals(2_000 + 8_000, account.getBalance());
     }
     @Test
     public void shouldPayLessThanBalance() {
@@ -96,7 +96,7 @@ public class SavingAccountTest {
 
     @Test
     public void shouldPayAllBalanceSum() {
-        //проверка оплаты на сумму, равную балансу
+        //проверка оплаты на сумму, равную начальному балансу
         SavingAccount account = new SavingAccount(
                 3_000,
                 1000,
@@ -114,7 +114,7 @@ public class SavingAccountTest {
         // проверка попытки оплаты на сумму, большую чем баланс
         SavingAccount account = new SavingAccount(
                 3_000,
-                3_000,
+                1_000,
                 10_000,
                 5
         );
@@ -195,6 +195,20 @@ public class SavingAccountTest {
 
         Assertions.assertThrows(IllegalArgumentException.class,() ->{
             account.getMinBalance();
+        });
+    }
+    @Test
+    public void shouldTrowWhenMaxBalanceNegative() {
+        // проверка создания аккаунта, где максимальный баланс отрицательный
+        SavingAccount account = new SavingAccount(
+                3_000,
+                 1_000,
+                -1_000,
+                1
+        );
+
+        Assertions.assertThrows(IllegalArgumentException.class,() ->{
+            account.getMaxBalance();
         });
     }
 }
