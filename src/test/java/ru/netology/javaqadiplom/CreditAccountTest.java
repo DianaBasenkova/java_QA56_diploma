@@ -1,11 +1,12 @@
 package ru.netology.javaqadiplom;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class CreditAccountTest {
 
-
+    /**
+    // ВЫБРОС ИСКЛЮЧЕНИЙ
+    */
     @Test
     public void sholdThrowExceptionBalance() {
         //test1
@@ -19,7 +20,7 @@ public class CreditAccountTest {
     public void sholdThrowExceptionRate() {
         //test2
         //Проверка выброса исключений для отрицательной ставки
-        CreditAccount account = new CreditAccount(10_000, 10_000, -10);
+
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
             new CreditAccount(10_000, 10_000, -10);
         });
@@ -29,17 +30,19 @@ public class CreditAccountTest {
     public void sholdThrowExceptionCreditLimit() {
         //test3
         //проверка выброса исключений для отрицательного кредитного лимита
-        CreditAccount account = new CreditAccount(10_000, -10_000, 10);
+
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
             new CreditAccount(10_000, -10_000, 10);
         });
     }
-
+    /**
+     // Метод Add
+     */
     @Test
     public void shouldAddToPositiveBalance() {
         //test4
         // пополнение сверх суммы лимита
-        Account account = new CreditAccount(5_000, 5_000, 15);
+        CreditAccount account = new CreditAccount(5_000, 5_000, 15);
         int amount = 3000;
         account.add(amount);
         int expected = account.getBalance() + amount;
@@ -52,7 +55,7 @@ public class CreditAccountTest {
     public void shouldAddIfDebitMoreThanPay() {
         //test5
         //пополнение при наличии задолженности
-        Account account = new CreditAccount(3_000, 20_000, 15);
+        CreditAccount account = new CreditAccount(3_000, 20_000, 15);
         int amount = 3000;
         account.add(amount);
         int expected = account.getBalance() + amount;
@@ -96,7 +99,9 @@ public class CreditAccountTest {
         int actual = account.getBalance();
         Assertions.assertEquals(expected, actual);
     }
-
+    /**
+     // Метод Pay
+     */
     @Test
     public void shouldPaySuccessfully() {
         //test9
@@ -170,7 +175,9 @@ public class CreditAccountTest {
         Boolean actual = account.pay(2000);
         Assertions.assertEquals(expected, actual);
     }
-
+    /**
+     // Метод yearChange
+     */
     @Test
     public void shouldCountPercentRate() {
         //test15
