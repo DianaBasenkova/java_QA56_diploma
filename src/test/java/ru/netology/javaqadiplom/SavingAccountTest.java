@@ -5,9 +5,167 @@ import org.junit.jupiter.api.Test;
 
 public class SavingAccountTest {
 
+    //********
+    // ВЫБРОСЫ ИСКЛЮЧЕНИЙ ** СОЗДАНИЕ АККАУНТА
+    //********
+
+    @Test
+    public void shouldTrowWhenInitialBalanceHigherMaxBalance() {
+        //test1
+        // проверка создания аккаунта, где текущий баланс больше максимального
+        Assertions.assertThrows(IllegalArgumentException.class,() ->{
+            new SavingAccount(10_000,1_000,9_000,1);
+        });
+    }
+    @Test
+    public void ShouldTrowWhenInitialBalanceLowerMinBalance() {
+        // test2
+        // проверка создания аккаунта, где текущий баланс меньше минимального
+        Assertions.assertThrows(IllegalArgumentException.class,() ->{
+            new SavingAccount(500,1_000,9_000,1);
+        });
+    }
+
+    @Test
+    public void shouldTrowWithNegativeRate() {
+        // test3
+        //проверка создания аккаунта с отрицаельным процентом
+        Assertions.assertThrows(IllegalArgumentException.class,() ->{
+            new SavingAccount(3_000,1_000,10_000,-1);
+        });
+    }
+
+    @Test
+    public void shouldTrowWhenMinHigherMaxBalance() {
+        //test4
+        // проверка создания аккаунта, где минимальный баланс больше максимального
+        Assertions.assertThrows(IllegalArgumentException.class,() ->{
+            new SavingAccount(3_000,10_000,1_000,1);
+        });
+    }
+    @Test
+    public void ShouldTrowWhenInitialBalanceHigherMaxBalance() {
+        // test 5
+        // проверка создания аккаунта, где текущий баланс выше максимального
+        Assertions.assertThrows(IllegalArgumentException.class,() ->{
+            new SavingAccount(9_001,1_000,9_000,1);
+        });
+    }
+    @Test
+    public void shouldTrowWhenMinBalanceNegative() {
+        //test6
+        // проверка создания аккаунта, где минимальный баланс отрицательный
+        Assertions.assertThrows(IllegalArgumentException.class,() ->{
+            new SavingAccount(3_000,-10_000,1_000,1);
+        });
+    }
+    //**************
+    // ОПЛАТА PAY
+    //**************
+    @Test
+    public void shouldPayLessThanBalanceAndMinBalance() {
+        //test 7
+        //проверка оплаты на сумму, меньшую чем текущий баланс, остаток в пределах минимального баланса
+        SavingAccount account = new SavingAccount(
+                3_000,
+                1_000,
+                10_000,
+                5
+        );
+
+        account.pay(2_000);
+        int expected = 3_000 - 2_000;
+        int actual = account.getBalance();
+
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void shouldPayAllInitialSumWhenMinBalanceZero() {
+        //test 19
+        //проверка оплаты на всю сумму текущего баланса (при минимальном 0)
+        SavingAccount account = new SavingAccount(
+                3_000,
+                0,
+                10_000,
+                5
+        );
+
+        account.pay(3_000);
+        int expected = 3_000 - 3_000;
+        int actual = account.getBalance();
+
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void shouldNotPayUnderMinBalance() {
+        //test 8
+        //проверка оплаты на сумму, меньшую чем текущий баланс, остаток ниже минимального баланса
+        SavingAccount account = new SavingAccount(
+                3_000,
+                1_000,
+                10_000,
+                5
+        );
+        boolean expected = false;
+        boolean actual = account.pay(2_001);
+
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void shouldNotPayMoreThanInitialAndMinBalance() {
+        //test 9
+        //проверка оплаты на сумму,большую текущего баланса, остаток ниже минимального баланса
+        SavingAccount account = new SavingAccount(
+                1_000,
+                1_000,
+                10_000,
+                5
+        );
+        boolean expected = false;
+        boolean actual = account.pay(1_001);
+
+        Assertions.assertEquals(expected, actual);
+    }
+    @Test
+    public void shouldNotPayZero() {
+        //test 10
+        //проверка оплаты на 0
+        SavingAccount account = new SavingAccount(
+                1_000,
+                1_000,
+                10_000,
+                5
+        );
+        boolean expected = false;
+        boolean actual = account.pay(0);
+
+        Assertions.assertEquals(expected, actual);
+    }
+    @Test
+    public void shouldNotPayNegative() {
+        //test 11
+        //проверка оплаты на отрицалельное число
+        SavingAccount account = new SavingAccount(
+                1_000,
+                1_000,
+                10_000,
+                5
+        );
+        boolean expected = false;
+        boolean actual = account.pay(-1);
+
+        Assertions.assertEquals(expected, actual);
+    }
+    //**************
+    // ПОПОЛНЕНИЕ ADD
+    //**************
     @Test
     public void shouldAddLessThanMaxBalance() {
-        //проверка пополнения баланса в пределах максимального лимита
+        // test 12
+        //проверка пополнения баланса, где остаток ниже максимального баланса
         SavingAccount account = new SavingAccount(
                 2_000,
                 1_000,
@@ -15,14 +173,45 @@ public class SavingAccountTest {
                 5
         );
 
-        account.add(1);
+        account.add(7_999);
 
-        Assertions.assertEquals(2_000 + 1, account.getBalance());
+        Assertions.assertEquals(2_000 + 7_999, account.getBalance());
+    }
+    @Test
+    public void shouldAddToMaxBalance() {
+        // test 13
+        //проверка пополнения баланса, где остаток равен максимальному балансу
+        SavingAccount account = new SavingAccount(
+                2_000,
+                1_000,
+                10_000,
+                5
+        );
+
+        account.add(8_000);
+
+        Assertions.assertEquals(2_000 + 8_000, account.getBalance());
+    }
+    @Test
+    public void shouldNotAddZero() {
+        // test 14
+        // проверка  пополнения на 0
+        SavingAccount account = new SavingAccount(
+                2_000,
+                1_000,
+                10_000,
+                5
+        );
+        boolean expected = false;
+        boolean actual = account.add(0);
+
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
     public void shouldNotAddMoreThanMaxBalance() {
-        // проверка попытки пополнения баланса свыше лимита
+        // test 15
+        // проверка  пополнения, после чего остаток выше максимального лимита
         SavingAccount account = new SavingAccount(
                 2_000,
                 1_000,
@@ -36,23 +225,9 @@ public class SavingAccountTest {
     }
 
     @Test
-    public void shouldNotAddZero() {
-        // проверка попытки пополнения на 0
-        SavingAccount account = new SavingAccount(
-                2_000,
-                1_000,
-                10_000,
-                5
-        );
-        boolean expected = false;
-        boolean actual = account.add(0);
-
-        Assertions.assertEquals(expected,actual);
-    }
-
-    @Test
     public void shouldNotAddNegative() {
-        //проверка пополнения на отрицательное число
+        // test 16
+        // проверка  пополнения на отрицательное число
         SavingAccount account = new SavingAccount(
                 2_000,
                 1_000,
@@ -65,67 +240,13 @@ public class SavingAccountTest {
         Assertions.assertEquals(expected, actual);
     }
 
-    @Test
-    public void shouldAddMaxBalance() {
-        // проверка поплнения на максимальную сумму в пределах баланса
-        SavingAccount account = new SavingAccount(
-                2_000,
-                1_000,
-                10_000,
-                5
-        );
+    //**************
+    // % ПОДСЧЕТ ПРОЦЕНТОВ
+    //**************
 
-        account.add(8_000);
-
-        Assertions.assertEquals(2_000 + 8_000, account.getBalance());
-    }
-    @Test
-    public void shouldPayLessThanBalance() {
-        //проверка оплаты на сумму, меньшую чем баланс
-        SavingAccount account = new SavingAccount(
-                3_000,
-                1_000,
-                10_000,
-                5
-        );
-        boolean expected = true;
-        boolean actual = account.pay(2_999);
-
-        Assertions.assertEquals(expected, actual);
-    }
-
-    @Test
-    public void shouldPayAllBalanceSum() {
-        //проверка оплаты на сумму, равную начальному балансу
-        SavingAccount account = new SavingAccount(
-                3_000,
-                1000,
-                10_000,
-                5
-        );
-        boolean expected = true;
-        boolean actual = account.pay(3_000);
-
-        Assertions.assertEquals(expected, actual);
-    }
-
-    @Test
-    public void shouldNotPayMoreBalanceSum() {
-        // проверка попытки оплаты на сумму, большую чем баланс
-        SavingAccount account = new SavingAccount(
-                3_000,
-                1_000,
-                10_000,
-                5
-        );
-
-        boolean expected = false;
-        boolean actual = account.pay(3001);
-
-        Assertions.assertEquals(expected,actual);
-    }
     @Test
     public void shouldCountYearChange() {
+        // test 17
         //проверка подсчета годового процента
         SavingAccount account = new SavingAccount(
                 3_000,
@@ -138,77 +259,19 @@ public class SavingAccountTest {
 
         Assertions.assertEquals(3_000/100*5, account.yearChange());
     }
-
-
     @Test
-    public void shouldTrowWithNegativeRate() {
-        //проверка попытки подсчета годовых процентов с отрицаельным процентом
+    public void shouldCountYearChangeWithZeroRate() {
+        // test 18
+        //проверка подсчета годового процента при ставке 0
         SavingAccount account = new SavingAccount(
                 3_000,
                 1_000,
                 10_000,
-                -1
+                0
         );
 
-        Assertions.assertThrows(IllegalArgumentException.class,() ->{
-            account.yearChange();
-        });
-    }
-    @Test
-    public void shouldTrowWithNegativeInitialBalance() {
-        //проверка попытки создания аккаута с отрицательным текущим счетом
-        SavingAccount account = new SavingAccount(
-                -3_000,
-                1_000,
-                10_000,
-                1
-        );
+        account.yearChange();
 
-        Assertions.assertThrows(IllegalArgumentException.class,() ->{
-            account.getBalance();
-        });
-    }
-    @Test
-    public void shouldTrowWhenMinHigherMaxBalance() {
-        // проверка создания аккаунта, где максимальный баланс ниже минимального
-        SavingAccount account = new SavingAccount(
-                3_000,
-                10_000,
-                1_000,
-                1
-        );
-
-        Assertions.assertThrows(IllegalArgumentException.class,() ->{
-            account.getBalance();
-        });
-    }
-
-    @Test
-    public void shouldTrowWhenMinBalanceNegative() {
-        // проверка создания аккаунта, где минимальный баланс отрицательный
-        SavingAccount account = new SavingAccount(
-                3_000,
-                -10_000,
-                1_000,
-                1
-        );
-
-        Assertions.assertThrows(IllegalArgumentException.class,() ->{
-            account.getMinBalance();
-        });
-    }
-    @Test
-    public void shouldTrowWhenMaxBalanceNegative() {
-        // проверка создания аккаунта, где максимальный баланс отрицательный
-        SavingAccount account = new SavingAccount(
-                3_000,
-                 1_000,
-                -1_000,
-                1
-        );
-
-        Assertions.assertThrows(IllegalArgumentException.class,() ->{
-            account.getMaxBalance();
-        });
+        Assertions.assertEquals(3_000/100*0, account.yearChange());
     }
 }
