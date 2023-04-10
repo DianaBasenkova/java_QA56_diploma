@@ -81,7 +81,7 @@ public class CreditAccountTest {
         //test7
         //пополнение на отрицательную сумму
         CreditAccount account = new CreditAccount(100_000, 100_000, 20);
-        int amount = 0;
+        int amount = -100;
         account.add(amount);
         Boolean expected = false;
         Boolean actual = account.add(amount);
