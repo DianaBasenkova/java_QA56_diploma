@@ -22,9 +22,22 @@ public class SavingAccount extends Account {
     public SavingAccount(int initialBalance, int minBalance, int maxBalance, int rate) {
         if (rate < 0) {
             throw new IllegalArgumentException(
-              "Накопительная ставка не может быть отрицательной, а у вас: " + rate
+                    "Накопительная ставка не может быть отрицательной, а у вас: " + rate
             );
         }
+        if (minBalance < 0) {
+            throw new IllegalArgumentException("Минимальный баланс не может быть отрицательным, а у вас" + minBalance
+            );
+        }
+        if (initialBalance > maxBalance){
+            throw new IllegalArgumentException("Сумма на текущем счете не может превышать максимальный баланс"
+            );
+        }
+        if (initialBalance < minBalance){
+            throw new IllegalArgumentException("Сумма на текущем счете не может быть ниже минимального баланса"
+            );
+        }
+
         this.balance = initialBalance;
         this.minBalance = minBalance;
         this.maxBalance = maxBalance;
@@ -45,8 +58,8 @@ public class SavingAccount extends Account {
         if (amount <= 0) {
             return false;
         }
-        balance = balance - amount;
-        if (balance > minBalance) {
+        if (balance - amount >= minBalance) {
+            balance = balance - amount;
             return true;
         } else {
             return false;
@@ -69,8 +82,8 @@ public class SavingAccount extends Account {
         if (amount <= 0) {
             return false;
         }
-        if (balance + amount < maxBalance) {
-            balance = amount;
+        if (balance + amount <= maxBalance) {
+            balance = balance + amount;
             return true;
         } else {
             return false;
