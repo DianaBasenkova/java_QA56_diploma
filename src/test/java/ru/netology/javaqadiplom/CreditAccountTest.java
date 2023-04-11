@@ -70,9 +70,8 @@ public class CreditAccountTest {
         //пополнение на 0
         CreditAccount account = new CreditAccount(100_000, 100_000, 20);
         int amount = 0;
-        account.add(amount);
-        int expected = account.getBalance() + amount;
-        int actual = account.getBalance();
+        Boolean expected = false;
+        Boolean actual = account.add(amount);
         Assertions.assertEquals(expected, actual);
     }
 
@@ -82,7 +81,6 @@ public class CreditAccountTest {
         //пополнение на отрицательную сумму
         CreditAccount account = new CreditAccount(100_000, 100_000, 20);
         int amount = -100;
-        account.add(amount);
         Boolean expected = false;
         Boolean actual = account.add(amount);
         Assertions.assertEquals(expected, actual);
@@ -158,9 +156,8 @@ public class CreditAccountTest {
         //платеж на сумму 0
         CreditAccount account = new CreditAccount(100_000, 100_000, 20);
         int amount = 0;
-        account.add(amount);
-        int expected = account.getBalance() - amount;
-        int actual = account.getBalance();
+        Boolean expected = false;
+        Boolean actual = account.pay(amount);
         Assertions.assertEquals(expected, actual);
     }
 
