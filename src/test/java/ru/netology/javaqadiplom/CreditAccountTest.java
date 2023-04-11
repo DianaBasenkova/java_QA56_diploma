@@ -44,9 +44,8 @@ public class CreditAccountTest {
         // пополнение сверх суммы лимита
         CreditAccount account = new CreditAccount(5_000, 5_000, 15);
         int amount = 3000;
-        account.add(amount);
-        int expected = account.getBalance() + amount;
-        int actual = account.getBalance();
+        int expected = 8000;
+        int actual = account.balance + amount;
         Assertions.assertEquals(expected, actual);
 
     }
@@ -57,9 +56,8 @@ public class CreditAccountTest {
         //пополнение при наличии задолженности
         CreditAccount account = new CreditAccount(3_000, 20_000, 15);
         int amount = 3000;
-        account.add(amount);
-        int expected = account.getBalance() + amount;
-        int actual = account.getBalance();
+        int expected = 6000;
+        int actual = account.balance + amount;
         Assertions.assertEquals(expected, actual);
     }
 
@@ -90,11 +88,10 @@ public class CreditAccountTest {
     public void shouldAddIfBalanceEqualZero() {
         //test8
         //пополнение если на текущем остатке 0
-        CreditAccount account = new CreditAccount(100_000, 100_000, 20);
+        CreditAccount account = new CreditAccount(0, 100_000, 20);
         int amount = 5000;
-        account.add(amount);
-        int expected = account.getBalance() + amount;
-        int actual = account.getBalance();
+        int expected = amount;
+        int actual = account.balance + amount;
         Assertions.assertEquals(expected, actual);
     }
     /**
@@ -106,9 +103,8 @@ public class CreditAccountTest {
         //успешный платеж
         CreditAccount account = new CreditAccount(100_000, 100_000, 20);
         int amount = 2000;
-        account.pay(amount);
-        int expected = account.getBalance() - amount;
-        int actual = account.getBalance();
+        int expected = 98000;
+        int actual = account.balance - amount;
         Assertions.assertEquals(expected, actual);
 
     }
@@ -131,9 +127,8 @@ public class CreditAccountTest {
         //успешный платеж, если остаток равен сумме платежа
         CreditAccount account = new CreditAccount(10_000, 100_000, 20);
         int amount = 10_000;
-        account.pay(amount);
-        int expected = account.getBalance() - amount;
-        int actual = account.getBalance();
+        Boolean expected = false;
+        Boolean actual = account.pay(amount);
         Assertions.assertEquals(expected, actual);
 
     }
@@ -144,9 +139,8 @@ public class CreditAccountTest {
         //платеж на отрицательную сумму
         CreditAccount account = new CreditAccount(100_000, 100_000, 20);
         int amount = -5000;
-        account.add(amount);
         Boolean expected = false;
-        Boolean actual = account.pay(2000);
+        Boolean actual = account.pay(amount);
         Assertions.assertEquals(expected, actual);
     }
 
@@ -199,7 +193,7 @@ public class CreditAccountTest {
     public void shouldCountPercentRateIfBalanceEqualCreditLimit() {
         //test17
         //рассчет процентной ставки если доступный остаток равен кредитному лимиту
-        CreditAccount account = new CreditAccount(105_000, 100_000, 10);
+        CreditAccount account = new CreditAccount(100_000, 100_000, 10);
         int expected = 0;
         int actual = account.yearChange();
         Assertions.assertEquals(expected, actual);
