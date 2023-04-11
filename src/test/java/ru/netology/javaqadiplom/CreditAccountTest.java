@@ -1,12 +1,13 @@
 package ru.netology.javaqadiplom;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class CreditAccountTest {
 
     /**
-    // ВЫБРОС ИСКЛЮЧЕНИЙ
-    */
+     * // ВЫБРОС ИСКЛЮЧЕНИЙ
+     */
     @Test
     public void sholdThrowExceptionBalance() {
         //test1
@@ -35,8 +36,9 @@ public class CreditAccountTest {
             new CreditAccount(10_000, -10_000, 10);
         });
     }
+
     /**
-     // Метод Add
+     * // Метод Add
      */
     @Test
     public void shouldAddToPositiveBalance() {
@@ -94,8 +96,9 @@ public class CreditAccountTest {
         int actual = account.balance + amount;
         Assertions.assertEquals(expected, actual);
     }
+
     /**
-     // Метод Pay
+     * // Метод Pay
      */
     @Test
     public void shouldPaySuccessfully() {
@@ -166,8 +169,9 @@ public class CreditAccountTest {
         Boolean actual = account.pay(2000);
         Assertions.assertEquals(expected, actual);
     }
+
     /**
-     // Метод yearChange
+     * // Метод yearChange
      */
     @Test
     public void shouldCountPercentRate() {
