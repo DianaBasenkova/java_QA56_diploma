@@ -257,16 +257,17 @@ public class SavingAccountTest {
     public void shouldCountYearChange() {
         // test 17
         //проверка подсчета годового процента
+        //доработка
         SavingAccount account = new SavingAccount(
-                3_000,
-                1_000,
+                99,
+                0,
                 10_000,
-                5
+                80
         );
 
         account.yearChange();
 
-        Assertions.assertEquals(3_000 / 100 * 5, account.yearChange());
+        Assertions.assertEquals(account.balance * 80 / 100, account.yearChange());
     }
 
     @Test
@@ -282,6 +283,8 @@ public class SavingAccountTest {
 
         account.yearChange();
 
-        Assertions.assertEquals(3_000 / 100 * 0, account.yearChange());
+        Assertions.assertEquals(3_000 * 0 / 100, account.yearChange());
     }
 }
+
+

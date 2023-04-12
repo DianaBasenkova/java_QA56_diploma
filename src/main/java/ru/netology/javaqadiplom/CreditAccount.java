@@ -98,7 +98,7 @@ public class CreditAccount extends Account {
     public int yearChange() {
         int debit = creditLimit - balance;
         if (debit >= 0) {
-            return debit / 100 * rate;
+            return debit * rate / 100;
         } else {
             return 0;
         }
